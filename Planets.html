@@ -58,79 +58,24 @@
    <!--buttons to switch the light side left/right (Later should be pulled from NASA database, these buttons test the functionality)-->
   <div style="display:flex;gap:1rem">
     <button onclick="currentSide='left'; phDraw(currentAngle)"  style="color:#fff;background:none;border:1px solid #fff;padding:4px 12px;cursor:pointer">← Left</button>
-    <button onclick="currentSide='right'; phDraw(currentAngle)" style="color:#fff;background:none;border:1px solid #fff;padding:4px 12px;cursor:pointer">Right →</button> 
+    <button onclick="currentSide='Right'; phDraw(currentAngle)" style="color:#fff;background:none;border:1px solid #fff;padding:4px 12px;cursor:pointer">Right →</button> 
   </div>
 
   <input type="range" min="0" max="180" value="90" oninput="currentAngle=+this.value; phDraw(currentAngle)" style="width:220px;accent-color:#fff;cursor:pointer">
   <p id="phase-readout" style="font:bold 16px sans-serif;color:#fff"></p>
 </div>
 
-<script>
-let currentAngle = 90;
-let currentSide  = 'left';
 
+ <!--Link to js phase angle draing-->
 
- //draws a phase demo on a canvas element, given an angle and side (left or right)
-function phDraw(a, cv, side) {
-  cv   = cv   || document.getElementById('phase-demo');
-  side = side || currentSide;
-  const x=cv.getContext('2d'), c=cv.width/2, r=c-3;
-  const f=(s,fn)=>{x.beginPath();fn();x.fillStyle=s;x.fill()};
-  x.clearRect(0,0,cv.width,cv.height);
-
-  f('#1a1a2e', ()=>x.arc(c,c,r,0,Math.PI*2));
-
-
-  
-  if(side==='right') {
-    f('#FFFFFF', ()=>{x.arc(c,c,r,-Math.PI/2,Math.PI/2,false);x.lineTo(c,c)});
-  } else {
-    f('#FFFFFF', ()=>{x.arc(c,c,r,Math.PI/2,-Math.PI/2,false);x.lineTo(c,c)});
-  }
-
-
-  //draws ellipse over lit half to create crescent shape
-  if(side==='right') {
-    f(a<90?'#FFFFFF':'#1a1a2e', ()=>x.ellipse(c,c,Math.abs(Math.cos(a*Math.PI/180))*r,r,0,0,Math.PI*2));
-  } else {
-    f(a<90?'#FFFFFF':'#1a1a2e', ()=>x.ellipse(c,c,Math.abs(Math.cos(a*Math.PI/180))*r,r,0,0,Math.PI*2));
-  }
-
-  x.beginPath();x.arc(c,c,r,0,Math.PI*2);x.strokeStyle='rgba(255,255,255,.2)';x.lineWidth=1.5;x.stroke();
-
-
-// takes the angle and determines what phase name to display
-  let phaseName = '';
-if(a>=180)          phaseName = 'New';
-else if(a>150)      phaseName = 'Crescent';
-else if(a>120)      phaseName = 'Quarter';
-else if(a>90)       phaseName = 'Half';
-else if(a>60)       phaseName = 'Quarter';
-else if(a>30)       phaseName = 'Gibbous';
-else                phaseName = 'Full';
-
-
-  //updates the text readout below the demo canvas to show the current angle, percentage lit, and which side is lit
-  if(cv===document.getElementById('phase-demo'))
-    document.getElementById('phase-readout').textContent=a+'° | '+Math.round((1-a/180)*100)+'% lit — '+side+'   |   '  +phaseName+'';
-}
+ <script src="planets.js"></script>
 
 
 
 
-//draws preset phase angles for demonstration out of the empty canvas from earlier
-[['Full',0],['Gibbous',30],['Quarter',60],['Half',90],['Quarter',120],['Crescent',150],['New',180]]
-  .forEach(([l,a])=>{
-    const d=document.createElement('div'),c=document.createElement('canvas'),s=document.createElement('span');
-    c.width=c.height=48; phDraw(a,c,'left');
-    Object.assign(d.style,{display:'flex',flexDirection:'column',alignItems:'center',gap:'4px'});
-    Object.assign(s.style,{font:'11px sans-serif',color:'#fff'});
-    s.textContent=l; d.append(c,s);
-    document.getElementById('phase-presets').appendChild(d);
-  });
 
-phDraw(90);
-</script>
+
+
 
 
 
