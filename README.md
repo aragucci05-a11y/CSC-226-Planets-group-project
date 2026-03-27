@@ -1,6 +1,4 @@
-==============================
-        PLANET SEEKER        
-==============================
+--== PLANET SEEKER ==--        
 
 Created by:
 Angelo Ragucci (project organizer)
