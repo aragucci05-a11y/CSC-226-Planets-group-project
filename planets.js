@@ -64,72 +64,54 @@ else             phaseName = 'New';
 phDraw(90);
 
 
-//Connects to NASA's Horizons API, and then pulls needed values such as phase angle to then be passed onto the phDraw function
+//Connects to NASA’s Horizon API, and then pulls needed values such as phase angle to then be passed onto the phDraw function
 //Async function makes the program wait until it gets the data from NASA before progressing
 async function fetchMercuryPhaseAngle() {
-    const params = new URLSearchParams({
-        format: 'text',
-        COMMAND: '199',            // Mercury
-        CENTER: '500@399',         // Earth geocenter
-        MAKE_EPHEM: 'YES',
-        EPHEM_TYPE: 'OBSERVER',
-        START_TIME: 'now',
-        STOP_TIME: 'now',
-        STEP_SIZE: '1 d',
-        QUANTITIES: '31',          // phase angle quantity
-        CSV_FORMAT: 'YES'
-    });
 
-    const url = `https://corsproxy.io/?https://ssd.jpl.nasa.gov/api/horizons.api?${params.toString()}`;
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Horizons request failed: ' + response.status);
-    const text = await response.text();
+  const params = new URLSearchParams({
+    format: 'json',
+    COMMAND: '199',
+    CENTER: '500@399',
+    MAKE_EPHEM: 'YES',
+    EPHEM_TYPE: 'OBSERVER',
+    START_TIME: '2026-03-27',   //Temporily hardcoded times, needs to pull current time and put that within the parameters for the API call
+    STOP_TIME: '2026-03-28',  
+    STEP_SIZE: '1m',          // 1 minute step size for high resolution
+    QUANTITIES: '24'          // Quantity 24 corresponds to the phase angle (S-T-O) in the Horizons API
+  });
 
-    let phase;
+  const url = `https://corsproxy.io/?https://ssd.jpl.nasa.gov/api/horizons.api?${params.toString()}`;
 
-    // 1) direct label match (plain text)
-    let m = text.match(/PHASE(?:[_ ]ANGLE)?\s*[:=]?\s*([0-9]+(?:\.[0-9]+)?)/i);
-    if (m) phase = Number(m[1]);
+  fetch(url)
+    .then(r => r.json())
+    .then(d => {
+      // The actual table data is inside d.result as one big string
+      const resultText = d.result;
 
-    // 2) CSV block from Horizons
-    if (phase == null) {
-        const csvBlock = text.includes('$$SOE')
-            ? text.slice(text.indexOf('$$SOE') + 5, text.indexOf('$$EOE') >= 0 ? text.indexOf('$$EOE') : undefined)
-            : text;
-        const lines = csvBlock.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-        if (lines.length >= 2 && lines[0].includes(',')) {
-            const headers = lines[0].replace(/"/g, '').split(',').map(h => h.trim().toLowerCase());
-            const phaseIndex = headers.findIndex(h => /phase/i.test(h));
-            if (phaseIndex >= 0) {
-                const values = lines[1].replace(/"/g, '').split(',').map(v => v.trim());
-                phase = Number(values[phaseIndex]);
-            }
+      console.log("Full result from Horizons:", resultText);
+
+      // Parse the data and extract the phase angle (Phase angle is listed under S-T-O column in table)
+      const lines = resultText.split('\n');
+      let phaseAngle = null;
+
+      for (let i = 0; i < lines.length; i++) {
+        if (lines[i].includes('$$SOE')) {
+          // The next line after $$SOE contains the actual data
+          const dataLine = lines[i + 1];
+          if (dataLine) {
+            // Split on whitespace and take the S-T-O value
+            const values = dataLine.trim().split(/\s+/);
+
+            phaseAngle = values[values.length - 1];
+            break;
+          }
         }
-    }
+      }
 
-    // 3) fallback scanning for a plausible 0-180 value
-    if (phase == null || Number.isNaN(phase)) {
-        const nums = Array.from(text.matchAll(/[-+]?\d*\.?\d+/g), m => Number(m[0])).filter(n => !Number.isNaN(n));
-        phase = nums.find(n => n >= 0 && n <= 180);
-    }
+      console.log("Phase Angle (S-T-O):", phaseAngle);
 
-    if (phase == null || Number.isNaN(phase)) {
-        throw new Error('Could not parse Mercury phase angle from Horizons response');
-    }
-
-    return phase;
+    })
+    .catch(err => console.error("Fetch error:", err));
 }
 
-// Only one definition of getPlanetData is present for clarity
-async function getPlanetData() {
-    try {
-        const phaseAngle = await fetchMercuryPhaseAngle();
-        console.log('Mercury phase angle:', phaseAngle);
-        return phaseAngle;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-}
-
-getPlanetData();
+fetchMercuryPhaseAngle();
