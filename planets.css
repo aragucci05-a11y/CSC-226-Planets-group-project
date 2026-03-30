@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 h1 {
     text-align: center;
     color: white;
@@ -40,5 +44,226 @@ nav a {
 
 nav a:hover {
   color: #a78bfa;
+}
+
+
+/* Canvas styling for phase angle demonstration and planet renderings (Applies to every planet) */
+canvas {
+  display: block;
+  margin: 2rem auto;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 100%;
+}
+
+/* Facts section styling */
+.fact-card {
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.08) 0%, rgba(79, 208, 231, 0.05) 100%);
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  border-radius: 12px;
+  padding: 2rem;
+  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+}
+
+.fact-card:hover {
+  border-color: rgba(167, 139, 250, 0.4);
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12) 0%, rgba(79, 208, 231, 0.08) 100%);
+  box-shadow: 0 0 15px rgba(167, 139, 250, 0.15);
+}
+
+.fact-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #a78bfa;
+  margin: 0 0 0.5rem 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.fact-text {
+  font-size: 14px;
+  color: #d0d0d0;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Readout styling for planet phase information */
+.readout {
+  font-family: 'Courier New', monospace;
+  font-size: 16px;
+  color: #a78bfa;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.3);
+  margin: 0.75rem auto 2rem auto;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+  background: rgba(10, 5, 30, 0.7);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  backdrop-filter: blur(4px);
+  max-width: 320px;
+  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.1);
+}
+
+/* Planet section titles and descriptions */
+.section-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 0 10px rgba(167, 139, 250, 0.2);
+}
+
+.section-description {
+  font-size: 16px;
+  color: #e0e0e0;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.8;
+  text-shadow: 1px 1px 2px #000000;
+}
+
+/* Demo planet container */
+.demo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.demo-title {
+  font-size: 18px;
+  color: #a78bfa;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Control buttons */
+.control-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.control-buttons button {
+  color: #fff;
+  background: rgba(167, 139, 250, 0.1);
+  border: 1px solid #a78bfa;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.control-buttons button:hover {
+  background: rgba(167, 139, 250, 0.2);
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.3);
+}
+
+/* Slider styling */
+.range-slider {
+  width: 220px;
+  accent-color: #a78bfa;
+  cursor: pointer;
+  margin: 1rem 0;
+}
+
+/* Main title card styling */
+.main-title-card {
+  text-align: center;
+  margin: 2rem auto 1.5rem auto;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.15) 0%, rgba(79, 208, 231, 0.1) 100%);
+  border: 2px solid rgba(167, 139, 250, 0.4);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(167, 139, 250, 0.3),
+              0 0 60px rgba(167, 139, 250, 0.15),
+              inset 0 0 20px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.main-title-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%);
+  animation: glow-pulse 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.main-title-card h1 {
+  position: relative;
+  z-index: 1;
+  font-size: 150px;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 0 20px rgba(167, 139, 250, 0.6),
+               0 0 40px rgba(79, 208, 231, 0.3),
+               0 0 60px rgba(167, 139, 250, 0.2);
+  letter-spacing: 2px;
+}
+
+/* Section title card styling */
+.section-title-card {
+  text-align: center;
+  margin: 4rem auto 1rem auto;
+  padding: 2rem 2.5rem;
+  background: linear-gradient(135deg, rgba(167, 139, 250, 0.12) 0%, rgba(79, 208, 231, 0.08) 100%);
+  border: 1.5px solid rgba(167, 139, 250, 0.3);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 0 20px rgba(167, 139, 250, 0.2),
+              0 0 40px rgba(167, 139, 250, 0.1),
+              inset 0 0 15px rgba(255, 255, 255, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.section-title-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%);
+  animation: glow-pulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.section-title-card p {
+  position: relative;
+  z-index: 1;
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(167, 139, 250, 0.5),
+               0 0 30px rgba(79, 208, 231, 0.2);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 

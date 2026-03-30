@@ -12,61 +12,156 @@
 
     <!-- Shortcut buttons at the top of the web page -->
     <nav>
-  <a href="#home">Home</a>                  
-  <a href="#planets">Planets</a>
-  <a href="#facts">Facts</a>
-</nav>
+      <a href="#home">Home</a>
+      <a href="#demo">Interactive Demo</a>
+      <a href="#facts">Facts</a>
+    </nav>
 
-    <section id="home">...</section>
-<section id="planets">...</section>
-<section id="facts">...</section>
+    <!-- Home Section -->
+    <section id="home">
 
 
 
 
 
     <!-- Text content -->
+    <div class="main-title-card">
+      <h1>Planet Seeker</h1>
+    </div>
+    <p class="section-description">
+      Welcome to Planet Seeker! View the phases of each planet in our solar system as they appear from Earth in real-time.
+    </p>
+
+    <div class="section-description" style="font-style: italic; color: #c0c0c0; margin-bottom: 3rem;">
+      <strong>Phase Angle:</strong> The angle between the Sun, observed object, and observer (Earth). It determines the illuminated portion of a celestial body's surface visible from your perspective.
+    </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section id="demo">
 
 
-    <h1>Planet Seeker (WIP)</h1>
-    <p>Welcome to Planet Seeker! <br>
-    Here you can view the phases of each planet of the solar system as viewed from Earth! <br>
-    <br>
-    <br>
-    <p>A phase angle is the angle between the Sun, the observed object, and the observer (e.g., Earth).<br>
-         It determines how much of the object's surface is illuminated and visible from the observer's perspective.<br>
-         <br>
-            An interactive example of how phase angles work:</p>
-    <br>
-</p>
 
 
 
 
+    <div class="demo-container">
+      <!--empty preset buttons for common phase angles to be filled by js canvassing-->
+      <div id="phase-presets" style="display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center;align-items:flex-end"></div> 
 
+      <!--Demo planet canvas-->
+      <div style="text-align: center;">
+        <p class="demo-title">Interactive Demo</p>
+        <canvas id="phase-demo" width="160" height="160"></canvas>
+        <p style="font-size: 14px; color: #a78bfa; margin-top: 1rem; letter-spacing: 0.5px;">Demo Planet</p>
+      </div>
 
-<div style="display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%;">  
+      <!--Demo control buttons-->
+      <div class="control-buttons">
+        <button onclick="currentSide='left'; phDraw(currentAngle)">← Left Side Lit</button>
+        <button onclick="currentSide='Right'; phDraw(currentAngle)">Right Side Lit →</button> 
+      </div>
 
-  <!--empty preset buttons for common phase angles to be filled by js canvassing-->
-  <div id="phase-presets" style="display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center;align-items:flex-end"></div> 
+      <!--Phase angle slider-->
+      <input type="range" min="0" max="180" value="90" oninput="currentAngle=+this.value; phDraw(currentAngle)" class="range-slider">
+      <p id="phase-readout" class="readout"></p>
+    </div>
+    </section>
 
-  <!--empty preset buttons for common phase angles to be filled by js canvassing-->
-  <canvas id="phase-demo" width="160" height="160"></canvas>
-  
-  
+    <!-- Planets Section -->
+    <section id="planets">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Moon" width="160" height="160"></canvas>
+      <p class="section-title">The Moon</p>
+      <p id="Moon-readout" class="readout"></p>
+    </div>
 
-   <!--buttons to switch the light side left/right (Later should be pulled from NASA database, these buttons test the functionality)-->
-  <div style="display:flex;gap:1rem">
-    <button onclick="currentSide='left'; phDraw(currentAngle)"  style="color:#fff;background:none;border:1px solid #fff;padding:4px 12px;cursor:pointer">← Left</button>
-    <button onclick="currentSide='Right'; phDraw(currentAngle)" style="color:#fff;background:none;border:1px solid #fff;padding:4px 12px;cursor:pointer">Right →</button> 
-  </div>
+    <!--Inner Planets Section-->
+    <div class="section-title-card">
+      <p>Inner Planets</p>
+    </div>
+    <p class="section-description">The inner 2 planets (Mercury and Venus) have very different phase angles than the outer planets, as they are closer to the sun than Earth is, and orbit much faster, meaning their phases are more variable. For example, Mercury can appear as a thin crescent or nearly full depending on its position relative to the Sun and Earth. Mercury also zips around the sun in just 80 days!</p>
 
-  <input type="range" min="0" max="180" value="90" oninput="currentAngle=+this.value; phDraw(currentAngle)" style="width:220px;accent-color:#fff;cursor:pointer">
-  <p id="phase-readout" style="font:bold 16px sans-serif;color:#fff"></p>
-</div>
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Mercury" width="160" height="160"></canvas>
+      <p class="section-title">Mercury</p>
+      <p id="Mercury-readout" class="readout"></p>
+    </div>
 
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Venus" width="160" height="160"></canvas>
+      <p class="section-title">Venus</p>
+      <p id="Venus-readout" class="readout"></p>
+    </div>
 
- <!--Link to js phase angle draing-->
+    <!--Outer Planets Section-->
+    <div class="section-title-card">
+      <p>Outer Planets & Mars</p>
+    </div>
+    <p class="section-description">The outer planets have more limited phase variations since they are farther from the Sun and Earth, and their orbits are much slower. This means from Earth we can typically see most of the surface lit up.</p>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Mars" width="160" height="160"></canvas>
+      <p class="section-title">Mars</p>
+      <p id="Mars-readout" class="readout"></p>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Jupiter" width="160" height="160"></canvas>
+      <p class="section-title">Jupiter</p>
+      <p id="Jupiter-readout" class="readout"></p>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Saturn" width="160" height="160"></canvas>
+      <p class="section-title">Saturn</p>
+      <p id="Saturn-readout" class="readout"></p>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Uranus" width="160" height="160"></canvas>
+      <p class="section-title">Uranus</p>
+      <p id="Uranus-readout" class="readout"></p>
+    </div>
+
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <canvas id="Neptune" width="160" height="160"></canvas>
+      <p class="section-title">Neptune</p>
+      <p id="Neptune-readout" class="readout"></p>
+    </div>
+    </section>
+
+    <!-- Facts Section -->
+    <section id="facts">
+      <div class="section-title-card">
+        <p>Interesting Facts</p>
+      </div>
+      <p class="section-description">Phase angles are a fundamental concept in astronomy. They help us understand the shape and illumination of celestial bodies as we observe them from Earth. The phase angle varies throughout the year as planets orbit the Sun, creating the beautiful phases we can observe through telescopes or even with our eyes.</p>
+      
+      <div style="max-width: 900px; margin: 3rem auto; display: flex; flex-direction: column; gap: 2rem;">
+        <div class="fact-card">
+          <h3 class="fact-title">Mercury & Venus</h3>
+          <p class="fact-text">These inner planets show dramatic phase changes throughout the year, similar to the Moon. Mercury can appear as a thin crescent or nearly full, while Venus becomes visibly gibbous even to the naked eye.</p>
+        </div>
+        
+        <div class="fact-card">
+          <h3 class="fact-title">The Moon</h3>
+          <p class="fact-text">Our Moon's phases are the most visible to us, cycling through new moon, crescent, quarter, gibbous, and full moon phases every 29.5 days. This cycle has influenced human cultures for thousands of years.</p>
+        </div>
+        
+        <div class="fact-card">
+          <h3 class="fact-title">Outer Planets</h3>
+          <p class="fact-text">The outer planets (Mars, Jupiter, Saturn, Uranus, Neptune) show minimal phase variations because they orbit beyond Earth. We see nearly the entire illuminated side year-round, with phase angles rarely exceeding a few degrees.</p>
+        </div>
+        
+        <div class="fact-card">
+          <h3 class="fact-title">Solar Elongation</h3>
+          <p class="fact-text">Solar elongation is the angular distance between a celestial object and the Sun as seen from Earth. Positive elongation means the object is east of the Sun, while negative means it's west. This determines which hemisphere of the planet is illuminated.</p>
+        </div>
+      </div>
+    </section>
+
+ <!--Link to js phase angle drawing (Must come after empty canvas elements, without it is like drawing something without paper)-->
 
  <script src="planets.js"></script>
 
