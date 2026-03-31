@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Solar System Explorer</title>
+  <link rel="stylesheet" href="claude-prototype.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ===================== NAV ===================== -->
+  <nav>
+    <div class="nav-logo">☀ SOLAR SYSTEM</div>
+    <div class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#planets">Planets</a>
+      <a href="#chart-section">Phase Angles</a>
+      <a href="#about">About</a>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-sub">EXPLORE THE</p>
+      <h1>SOLAR SYSTEM</h1>
+      <p class="hero-desc">Real-time planetary data pulled live from NASA.</p>
+      <a href="#planets" class="btn">EXPLORE PLANETS</a>
+    </div>
+    <!-- floating orbs for atmosphere -->
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+  </section>
+
+  <!-- ===================== PLANET CARDS ===================== -->
+  <section id="planets">
+    <h2 class="section-title">THE PLANETS</h2>
+    <div class="cards-grid">
+
+      <div class="card" onclick="showDetails('mercury')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #b5b5b5, #5a5a5a)"></div>
+        <h3>Mercury</h3>
+        <p>Closest to the Sun</p>
+        <span class="card-tag">0.39 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('venus')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #f5deb3, #c8a86b)"></div>
+        <h3>Venus</h3>
+        <p>Hottest planet</p>
+        <span class="card-tag">0.72 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('earth')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #4fa3e0, #2d6e2d)"></div>
+        <h3>Earth</h3>
+        <p>Our home</p>
+        <span class="card-tag">1.00 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('mars')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #e05a2b, #8b2500)"></div>
+        <h3>Mars</h3>
+        <p>The Red Planet</p>
+        <span class="card-tag">1.52 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('jupiter')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #c88b3a, #8b5e3c); width: 90px; height: 90px;"></div>
+        <h3>Jupiter</h3>
+        <p>Largest planet</p>
+        <span class="card-tag">5.20 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('saturn')">
+        <div class="planet-icon saturn-icon" style="background: radial-gradient(circle at 35% 35%, #e4d191, #a89060)"></div>
+        <h3>Saturn</h3>
+        <p>Lord of the rings</p>
+        <span class="card-tag">9.58 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('uranus')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #7de8e8, #4aacac)"></div>
+        <h3>Uranus</h3>
+        <p>Rotates on its side</p>
+        <span class="card-tag">19.2 AU</span>
+      </div>
+
+      <div class="card" onclick="showDetails('neptune')">
+        <div class="planet-icon" style="background: radial-gradient(circle at 35% 35%, #4b70dd, #1a3a8a)"></div>
+        <h3>Neptune</h3>
+        <p>Windiest planet</p>
+        <span class="card-tag">30.1 AU</span>
+      </div>
+
+    </div>
+
+    <!-- detail box that appears when a card is clicked -->
+    <div id="detail-box" class="hidden">
+      <span id="detail-close" onclick="closeDetails()">✕</span>
+      <h3 id="detail-name"></h3>
+      <p id="detail-text"></p>
+    </div>
+  </section>
+
+  <!-- ===================== PHASE ANGLE CHART ===================== -->
+  <section id="chart-section">
+    <h2 class="section-title">REAL-TIME PHASE ANGLES</h2>
+    <p class="section-sub">Live data from NASA JPL — how much of each planet is lit by the Sun as seen from Earth.</p>
+
+    <div class="chart-wrapper">
+      <div id="chart-status">⏳ Fetching live NASA data...</div>
+      <canvas id="chart"></canvas>
+    </div>
+
+    <button class="btn" onclick="loadAllPhaseAngles()">↺ REFRESH DATA</button>
+  </section>
+  <!-- ===================== ABOUT ===================== -->
+ <section id="about">
+  <h2 class="section-title">ABOUT</h2>
+  <p class="section-sub">The project itself and the team behind Planet Seeker.</p>
+
+  <div class="about-block">
+    <h3 class="about-heading">The Project</h3>
+    <p class="about-paragraph">
+      Planet Seeker is an interactive astronomy tool that visualizes the real-time phases of every planet in our solar system as seen from Earth. By querying NASA JPL's Horizons API, the site retrieves live phase angles and solar elongation data for each body, then renders an accurate illumination portrait using HTML5 Canvas.
+    </p>
+  </div>
+
+  <div class="about-block">
+    <h3 class="about-heading">How It Works</h3>
+    <div class="about-tech-grid">
+      <div class="tech-card"><span class="tech-icon">🖥️</span><h4>HTML5 Canvas</h4><p>Each planet is drawn by layering a dark circle, a lit semicircle, and a terminator ellipse whose width is controlled by the phase angle.</p></div>
+      <div class="tech-card"><span class="tech-icon">🛰️</span><h4>NASA JPL Horizons API</h4><p>Live ephemeris data fetched on page load — phase angle, solar elongation, and orbital speed per body.</p></div>
+      <div class="tech-card"><span class="tech-icon">🌐</span><h4>CORS Proxy</h4><p>corsproxy.io relays API calls to NASA's servers to get around browser cross-origin restrictions.</p></div>
+    </div>
+  </div>
+
+  <div class="about-block">
+    <h3 class="about-heading">The Team</h3>
+    <div class="about-team-grid">
+      <div class="team-card"><div class="team-avatar"></div><h4>Angelo Ragucci</h4><span class="team-role">Project Lead · JavaScript</span><p>Conceived the project and built the core JS — phase-angle engine, NASA API integration, CORS proxy, and animation system.</p></div>
+      <div class="team-card"><div class="team-avatar"></div><h4>Nicholas Barton</h4><span class="team-role">Contributor</span><p>Contributed to the development of different parts of the site, allowing for a seamless and intuitive user experience.</p></div>
+      <div class="team-card"><div class="team-avatar"></div><h4>Justin Robles</h4><span class="team-role">Contributor</span><p>Contributed to the development and design of the site.</p></div>
+    </div>
+  </div>
+
+  <div class="about-block">
+    <h3 class="about-heading">Data Sources</h3>
+    <div class="about-sources">
+      <a class="source-card" href="https://ssd.jpl.nasa.gov/horizons/" target="_blank"><span class="source-icon">🔭</span><div><h4>NASA JPL Horizons</h4><p>Real-time ephemeris data for phase angles, solar elongation, and orbital speeds.</p></div><span class="source-arrow">↗</span></a>
+      <a class="source-card" href="https://corsproxy.io" target="_blank"><span class="source-icon">🔗</span><div><h4>corsproxy.io</h4><p>Open CORS proxy used to relay browser requests to NASA's Horizons API.</p></div><span class="source-arrow">↗</span></a>
+    </div>
+  </div>
+</section>
+  <!-- ===================== FOOTER ===================== -->
+  <footer>
+    <p>Data sourced from <a href="https://ssd.jpl.nasa.gov/" target="_blank">NASA JPL Horizons</a></p>
+    <p>Built for school · Future data science project</p>
+  </footer>
+
+  <script src="claude-prototype.js"></script>
+</body>
+</html>

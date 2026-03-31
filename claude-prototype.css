@@ -1,0 +1,511 @@
+/* ===================== RESET & BASE ===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --purple: #a78bfa;
+  --blue:   #60a5fa;
+  --dark:   #05060f;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --glass:   rgba(255, 255, 255, 0.08);
+}
+
+body {
+  font-family: 'Rajdhani', sans-serif;
+  color: white;
+  background-color: var(--dark);
+  /* swap this path to your actual space image */
+  background-image: url('space.jpg');
+  background-attachment: fixed;
+  background-size: auto;
+  background-repeat: repeat;
+  min-height: 100vh;
+}
+
+/* ===================== NAV ===================== */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  z-index: 999;
+  border-bottom: 1px solid rgba(167, 139, 250, 0.2);
+}
+
+.nav-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.15em;
+  color: var(--purple);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.nav-links a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover {
+  color: var(--purple);
+}
+
+/* ===================== HERO ===================== */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  animation: fadeUp 1.2s ease forwards;
+}
+
+.hero-sub {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.4em;
+  color: var(--purple);
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(3rem, 10vw, 8rem);
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  background: linear-gradient(135deg, #fff 30%, var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+}
+
+.hero-desc {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* floating background orbs */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  z-index: 1;
+}
+.orb1 { width: 500px; height: 500px; background: var(--purple); top: -100px; left: -100px; animation: drift 12s ease-in-out infinite alternate; }
+.orb2 { width: 300px; height: 300px; background: var(--blue);   bottom: 0; right: 10%; animation: drift 16s ease-in-out infinite alternate-reverse; }
+.orb3 { width: 200px; height: 200px; background: #f472b6;       top: 40%; left: 60%; animation: drift 10s ease-in-out infinite alternate; }
+
+@keyframes drift {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(40px, 30px); }
+}
+
+/* ===================== SHARED BUTTON ===================== */
+.btn {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  border: 1px solid var(--purple);
+  color: var(--purple);
+  text-decoration: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.btn:hover {
+  background: var(--purple);
+  color: #000;
+}
+
+/* ===================== SECTIONS ===================== */
+section {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  letter-spacing: 0.2em;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.section-sub {
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  font-size: 1rem;
+  margin-bottom: 3rem;
+  letter-spacing: 0.05em;
+}
+
+/* ===================== PLANET CARDS ===================== */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  border-color: var(--purple);
+  box-shadow: 0 0 30px rgba(167, 139, 250, 0.2);
+}
+
+.card h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+
+.card p {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 1rem;
+}
+
+.card-tag {
+  font-size: 0.75rem;
+  color: var(--purple);
+  border: 1px solid var(--purple);
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  letter-spacing: 0.1em;
+}
+
+/* planet circle */
+.planet-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 0 auto 1.2rem;
+  animation: spin 20s linear infinite;
+  box-shadow: inset -8px -4px 16px rgba(0,0,0,0.5);
+}
+
+/* saturn ring hack */
+.saturn-icon {
+  position: relative;
+}
+.saturn-icon::after {
+  content: '';
+  position: absolute;
+  width: 110%;
+  height: 30%;
+  border: 3px solid rgba(228, 209, 145, 0.6);
+  border-radius: 50%;
+  top: 35%;
+  left: -5%;
+  transform: rotateX(70deg);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* detail box */
+#detail-box {
+  position: relative;
+  background: var(--glass);
+  border: 1px solid var(--purple);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+  backdrop-filter: blur(12px);
+  animation: fadeUp 0.3s ease;
+}
+
+#detail-close {
+  position: absolute;
+  top: 1rem;
+  right: 1.2rem;
+  cursor: pointer;
+  color: rgba(255,255,255,0.5);
+  font-size: 1.2rem;
+}
+
+#detail-close:hover { color: white; }
+
+#detail-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: var(--purple);
+}
+
+#detail-text {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.8);
+  line-height: 1.7;
+}
+
+.hidden { display: none; }
+
+/* ===================== CHART ===================== */
+#chart-section {
+  text-align: center;
+}
+
+.chart-wrapper {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  backdrop-filter: blur(8px);
+}
+
+#chart-status {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+/* ===================== FOOTER ===================== */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.3);
+  font-size: 0.9rem;
+  line-height: 2;
+}
+
+footer a {
+  color: var(--purple);
+  text-decoration: none;
+}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================== ABOUT ===================== */
+.about-block { 
+  margin-bottom: 3.5rem; 
+}
+
+.about-heading { 
+  font-family: 'Orbitron', sans-serif; 
+  font-size: 0.7rem; 
+  letter-spacing: 0.3em; 
+  color: var(--purple); 
+  text-transform: uppercase; 
+  margin-bottom: 1.5rem; 
+  padding-bottom: 0.6rem; 
+  border-bottom: 1px solid dark-purple; 
+}
+
+.about-paragraph { 
+  font-size: 1.05rem; color: rgba(255,255,255,0.7); 
+  line-height: 1.9; 
+  background: var(--card-bg); 
+  border: 1px solid rgba(255,255,255,0.08); 
+  border-radius: 16px; 
+  padding: 2rem; 
+  backdrop-filter: blur(8px); 
+}
+
+.about-tech-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+  gap: 1.2rem; 
+}
+
+.tech-card { 
+  background: var(--card-bg); 
+  border: 1px solid rgba(255,255,255,0.08); 
+  border-radius: 16px; 
+  padding: 1.8rem 1.5rem; 
+  backdrop-filter: blur(8px); 
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; 
+}
+
+.tech-card:hover { 
+  transform: translateY(-6px); 
+  border-color: var(--purple); 
+  box-shadow: 0 0 24px rgba(167,139,250,0.18); 
+}
+
+.tech-icon { 
+  font-size: 22px; 
+  display: block; 
+  margin-bottom: 0.9rem; 
+}
+
+.tech-card h4 { 
+  font-family: 'Orbitron', sans-serif; 
+  font-size: 0.7rem; 
+  letter-spacing: 0.12em; 
+  color: white; 
+  margin-bottom: 0.6rem; 
+}
+
+.tech-card p { 
+  font-size: 0.88rem; 
+  color: rgba(255,255,255,0.5); 
+  line-height: 1.7; 
+}
+
+.about-team-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+  gap: 1.2rem; 
+}
+
+.team-card { 
+  background: var(--card-bg); 
+  border: 1px solid rgba(255,255,255,0.08); 
+  border-radius: 16px; 
+  padding: 2rem 1.5rem; 
+  text-align: center; 
+  backdrop-filter: blur(8px); 
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; 
+}
+
+.team-card:hover { 
+  transform: translateY(-6px); 
+  border-color: var(--purple); 
+  box-shadow: 0 0 24px rgba(167,139,250,0.18); 
+}
+
+.team-avatar { 
+  width: 56px; 
+  height: 56px; 
+  border-radius: 50%; 
+  background: rgba(167,139,250,0.15); 
+  border: 1px solid var(--purple); 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  font-family: 'Orbitron', sans-serif; 
+  font-size: 0.75rem; 
+  color: var(--purple); 
+  margin: 0 auto 1.2rem; 
+}
+
+.team-card h4 { 
+  font-family: 'Orbitron', sans-serif; 
+  font-size: 0.8rem; 
+  letter-spacing: 0.1em; 
+  color: white; 
+  margin-bottom: 0.4rem; 
+}
+
+.team-role { 
+  display: inline-block; 
+  font-size: 0.72rem; 
+  color: var(--purple); 
+  letter-spacing: 0.1em; 
+  margin-bottom: 1rem; 
+}
+
+.team-card p { 
+  font-size: 0.88rem; 
+  color: rgba(255,255,255,0.5); 
+  line-height: 1.65; 
+  text-align: left; 
+}
+
+.about-sources { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1rem; 
+}
+.source-card { 
+  display: flex; 
+  align-items: center; 
+  gap: 1.2rem; 
+  background: var(--card-bg); 
+  border: 1px solid rgba(255,255,255,0.08); 
+  border-radius: 16px; 
+  padding: 1.5rem 1.8rem; 
+  text-decoration: none; 
+  backdrop-filter: blur(8px); 
+  transition: border-color 0.3s, box-shadow 0.3s; 
+}
+
+.source-card:hover { 
+  border-color: var(--purple); 
+  box-shadow: 0 0 24px rgba(167,139,250,0.18); 
+}
+.source-icon { 
+  font-size: 24px; 
+  flex-shrink: 0; 
+}
+
+.source-card div { 
+  flex: 1; 
+}
+
+.source-card h4 { 
+  font-family: 'Orbitron', sans-serif; 
+  font-size: 0.75rem; 
+  letter-spacing: 0.12em; 
+  color: white; 
+  margin-bottom: 0.35rem; 
+}
+.source-card p { 
+  font-size: 0.88rem; 
+  color: rgba(255,255,255,0.5); 
+  line-height: 1.55; 
+}
+.source-arrow { 
+  font-size: 1.1rem; 
+  color: rgba(167,139,250,0.4); 
+  flex-shrink: 0; 
+  transition: color 0.2s, transform 0.2s; 
+}
+.source-card:hover .source-arrow { 
+  color: var(--purple); 
+  transform: translate(3px, -3px); } 
