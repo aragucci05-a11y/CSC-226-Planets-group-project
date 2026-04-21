@@ -1,4 +1,3 @@
-
 //sets default state for the phase demo, with an angle of 90 degrees and the left side lit
 let currentAngle = 90;
 let currentSide  = 'left';
@@ -44,9 +43,11 @@ function phDraw(a, cv, side, animProgress) {
   const f=(s,fn)=>{x.beginPath();fn();x.fillStyle=s;x.fill()};
   x.clearRect(0,0,cv.width,cv.height);
 
+  // Draw planet with glow effect
+  drawPlanetWithGlow(x, c, r, planetColor, animProgress);
+
   f('#1a1a2e', ()=>x.arc(c,c,r,0,Math.PI*2));
 
-  
   if(side==='Right') {
     f(planetColor, ()=>{x.arc(c,c,r,-Math.PI/2,Math.PI/2,false);x.lineTo(c,c)});
   } else {
@@ -62,8 +63,36 @@ function phDraw(a, cv, side, animProgress) {
 
   x.beginPath();x.arc(c,c,r,0,Math.PI*2);x.strokeStyle='rgba(255,255,255,.2)';x.lineWidth=1.5;x.stroke();
 
+  // Enhanced glow effect
+  const litFraction = 1 - (a / 180);
+  const glowIntensity = litFraction * 60 * animProgress;
+  const glowAlpha = litFraction * 0.9 * animProgress;
 
-// takes the angle and determines what phase name to display
+  if (glowIntensity > 0.5) {
+    const glowColor = planetColors[cv.id] || '#FFFFFF';
+    const hexToRgb = (hex) => {
+      const r = parseInt(hex.slice(1,3), 16);
+      const g = parseInt(hex.slice(3,5), 16);
+      const b = parseInt(hex.slice(5,7), 16);
+      return `${r},${g},${b}`;
+    };
+    const rgb = hexToRgb(glowColor);
+
+    // Multiple glow layers for stronger effect
+    for (let i = 3; i > 0; i--) {
+      x.save();
+      x.shadowBlur = glowIntensity * i;
+      x.shadowColor = `rgba(${rgb}, ${glowAlpha * (1 - i * 0.3)})`;
+      x.beginPath();
+      x.arc(c, c, r + i, 0, Math.PI * 2);
+      x.strokeStyle = `rgba(${rgb}, ${glowAlpha * 0.4})`;
+      x.lineWidth = 2;
+      x.stroke();
+      x.restore();
+    }
+  }
+
+  // takes the angle and determines what phase name to display
   let phaseName = '';
 if(a<=5)         phaseName = side==='Right' ? 'Full' : 'Full';
 else if(a<=45)   phaseName = side==='Right' ? 'Waxing Gibbous'   : 'Waning Gibbous';
@@ -269,6 +298,114 @@ fetchPlanetPhaseAngle('Jupiter', '599');
 fetchPlanetPhaseAngle('Saturn', '699');
 fetchPlanetPhaseAngle('Uranus', '799');
 fetchPlanetPhaseAngle('Neptune', '899');
+
+// Planet image URLs
+const planetImages = {
+  'Moon': './images/moon.jpg',
+  'Mercury': './images/mercury.jpg',
+  'Venus': './images/venus.jpg',
+  'Mars': './images/mars.jpg',
+  'Jupiter': './images/jupiter.jpg',
+  'Saturn': './images/saturn.jpg',
+  'Uranus': './images/uranus.jpg',
+  'Neptune': './images/neptune.jpg'
+};
+
+// Store loaded planet images
+const loadedImages = {};
+
+// Preload planet images
+async function preloadPlanetImages() {
+  for (const [planetName, url] of Object.entries(planetImages)) {
+    const img = new Image();
+    img.onload = () => {
+      loadedImages[planetName] = img;
+    };
+    img.onerror = () => {
+      console.warn(`Failed to load image for ${planetName}: ${url}`);
+    };
+    img.src = url;
+  }
+}
+
+// Modified phDraw function to use planet images
+function phDraw(a, cv, side, animProgress) {
+  cv   = cv   || document.getElementById('phase-demo');
+  side = side || currentSide;
+  animProgress = animProgress || 1;
+  
+  const animAngle = a * animProgress;
+  const x = cv.getContext('2d'), c = cv.width/2, fullRadius = c - 3;
+  const r = fullRadius * animProgress;
+  
+  const planetColor = planetColors[cv.id] || '#FFFFFF';
+  const f = (s, fn) => {x.beginPath(); fn(); x.fillStyle = s; x.fill()};
+  x.clearRect(0, 0, cv.width, cv.height);
+
+  // Draw background shadow sphere
+  f('#1a1a2e', () => x.arc(c, c, r, 0, Math.PI * 2));
+
+  // Draw planet image if available
+  const planetImg = loadedImages[cv.id];
+  if (planetImg && planetImg.complete) {
+    x.save();
+    x.beginPath();
+    x.arc(c, c, r, 0, Math.PI * 2);
+    x.clip();
+    x.drawImage(planetImg, c - r, c - r, r * 2, r * 2);
+    x.restore();
+  }
+
+  // Draw lit/dark side
+  if (side === 'Right') {
+    f(planetColor, () => {x.arc(c, c, r, -Math.PI/2, Math.PI/2, false); x.lineTo(c, c)});
+  } else {
+    f(planetColor, () => {x.arc(c, c, r, Math.PI/2, -Math.PI/2, false); x.lineTo(c, c)});
+  }
+
+  // Draw crescent shape
+  if (side === 'Right') {
+    f(animAngle < 90 ? planetColor : '#1a1a2e', () => x.ellipse(c, c, Math.abs(Math.cos(animAngle * Math.PI/180)) * r, r, 0, 0, Math.PI * 2));
+  } else {
+    f(animAngle < 90 ? planetColor : '#1a1a2e', () => x.ellipse(c, c, Math.abs(Math.cos(animAngle * Math.PI/180)) * r, r, 0, 0, Math.PI * 2));
+  }
+
+  x.beginPath(); x.arc(c, c, r, 0, Math.PI * 2); x.strokeStyle = 'rgba(255,255,255,.2)'; x.lineWidth = 1.5; x.stroke();
+
+  // Enhanced glow effect
+  const litFraction = 1 - (a / 180);
+  const glowIntensity = litFraction * 60 * animProgress;
+  const glowAlpha = litFraction * 0.9 * animProgress;
+
+  if (glowIntensity > 0.5) {
+    const glowColor = planetColors[cv.id] || '#FFFFFF';
+    const hexToRgb = (hex) => {
+      const r = parseInt(hex.slice(1,3), 16);
+      const g = parseInt(hex.slice(3,5), 16);
+      const b = parseInt(hex.slice(5,7), 16);
+      return `${r},${g},${b}`;
+    };
+    const rgb = hexToRgb(glowColor);
+
+    // Multiple glow layers for stronger effect
+    for (let i = 3; i > 0; i--) {
+      x.save();
+      x.shadowBlur = glowIntensity * i;
+      x.shadowColor = `rgba(${rgb}, ${glowAlpha * (1 - i * 0.3)})`;
+      x.beginPath();
+      x.arc(c, c, r + i, 0, Math.PI * 2);
+      x.strokeStyle = `rgba(${rgb}, ${glowAlpha * 0.4})`;
+      x.lineWidth = 2;
+      x.stroke();
+      x.restore();
+    }
+  }
+
+  // ...existing phase name and readout code...
+}
+
+// Call this when the page loads
+preloadPlanetImages();
 
 
 
