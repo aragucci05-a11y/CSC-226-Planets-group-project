@@ -1,9 +1,3 @@
-Fork to add about page (Nick Barton 3/31)
-
-
-
-
-
 --== PLANET SEEKER ==--        
 
 Created by:
@@ -15,9 +9,11 @@ A website created to track information about the planets in our solar system.
 Uses real time NASA data from the Horizon API to display information about each planet.
 Draws phase angles for each planet as viewed from Earth, similar to Lunar phases
 
-Challenges and thought process during creation:
+---
 
-Angelo:
+### Challenges and thought process during creation:
+
+**Angelo:**
 When embarking on this project, I had very little experience writing in javascript,
 let alone how to use an API.
 
@@ -59,5 +55,26 @@ to the draw function. This was the last major technical hurdle, and after this o
 and aesthetic changes were made, as the system structure proved quite modular, allowing easy expansion when needed.
 An example of this is that the planet speed was added late into the project, but was simple since the foundation was in place.
 
-More features may be added in the future as needed.
+**Justin:**
+My focus was on system architecture, API reliability, and transforming the frontend into a highly interactive, responsive "Sci-Fi HUD" dashboard. I wanted to ensure the project was not only visually engaging but also technically robust enough to survive network issues during a live presentation.
 
+**Technical Contributions:**
+* **API Queueing & Resiliency:** Refactored the NASA Horizon fetch logic to stagger API requests. This prevents CORS proxy rate-limiting and reduces the initial network payload.
+* **Simulated Data Fail-Safe:** Engineered a local state machine with fallback telemetry data. If the school Wi-Fi or external proxy drops, the site seamlessly injects this local data to prevent UI crashes and ensure 100% uptime.
+* **Cinematic UI/UX:** Completely redesigned the aesthetic using CSS media queries for full mobile responsiveness. Added custom styling including global CRT scanlines, holographic SVG targeting cursors, and glowing webkit scrollbars.
+* **Advanced DOM Interactivity:** * Programmed an asynchronous terminal boot sequence using JS Promises.
+  * Built dynamic neon tachometers that visually scale based on live planetary velocities.
+  * Engineered a state-driven "Auto-Orbit" toggle and mapped Left/Right Arrow keys for manual phase scrubbing.
+  * Created a "HUD Focus" hover effect that dynamically blurs inactive planetary cards.
+ 
+ 
+**Nicholas:**
+My focus was on the user-layer and presentation side of the website, which allowed me to contribute heavily to the project’s overall visual identity while continuing to develop my frontend programming skills. One of my most notable developments was creating a working glow-effect system across various site elements, which significantly enhanced the futuristic atmosphere and visual depth of the interface. Although the effect required extensive experimentation and revision, the process gave me valuable experience with advanced CSS styling, layering, visual rendering, and how CSS dynamically integrates with HTML elements to create responsive visual behavior.
+
+In addition to visual development, I was responsible for making informational sections like "About", "How it Works", "The Team", "Data Sources", "Contact Us", and "Credits" pages. Developing these sections while integrating with my teammates' changes at the same time allowed the site to stay consistent. I had to make sure each contribution I added made sense, while adding to other contributions.
+
+Throughout development, I consistently refined layouts and integration methods to allow for new ideas, changes, and sections, and made it feel cohesive with the rest of the platform. 
+
+
+---
+More features may be added in the future as needed.
