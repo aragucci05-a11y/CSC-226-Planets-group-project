@@ -1,4 +1,6 @@
---== PLANET SEEKER ==--        
+--== PLANET SEEKER ==--  
+
+https://aragucci05-a11y.github.io/CSC-226-Planets-group-project/
 
 Created by:
 Angelo Ragucci (project organizer)
