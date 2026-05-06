@@ -132,7 +132,7 @@ phDraw(90);
 // FAIL-SAFE DATA & API QUEUE
 // ==========================================
 const fallbackData = {
-    'Moon': { phase: 45, litSide: 'Right', speed: 1.02, maxSpeed: 50 },
+    'Moon': { phase: 45, litSide: 'left', speed: 1.02, maxSpeed: 50 },
     'Mercury': { phase: 120, litSide: 'left', speed: 47.36, maxSpeed: 50 },
     'Venus': { phase: 75, litSide: 'Right', speed: 35.02, maxSpeed: 50 },
     'Mars': { phase: 30, litSide: 'left', speed: 24.07, maxSpeed: 50 },
@@ -145,16 +145,10 @@ const fallbackData = {
 function formatTelemetry(planetName, a, side, phaseName, speed) {
     const readoutElement = document.getElementById(`${planetName}-readout`);
     if(readoutElement) {
-        // Calculate tachometer width relative to Mercury (max 50km/s)
-        const speedPercent = Math.min((speed / 50) * 100, 100);
-        
         readoutElement.innerHTML = `
             ${a}° | ${Math.round((1-a/180)*100)}% lit — ${side} <br>
             <span style="color:white">${phaseName}</span> <br><br>
-            Velocity: ${speed.toFixed(2)} km/s
-            <div class="tach-container">
-                <div class="tach-bar" style="width: ${speedPercent}%"></div>
-            </div>
+            Average Speed: ${speed.toFixed(2)} km/s
         `;
     }
 }
@@ -164,7 +158,7 @@ async function loadPlanetData(planetName) {
     if(!canvas) return;
 
     try {
-        // Fallback simulated data load
+        // Get base data
         const data = fallbackData[planetName];
         let phaseName = '';
         if(data.phase<=5) phaseName = 'Full';
