@@ -63,49 +63,49 @@
       
       <div class="planet-grid">
         <div class="planet-card">
-          <canvas id="Moon" width="160" height="160"></canvas>
+          <canvas id="Moon" width="160" height="160" data-color="#A9A9A9" data-glow="rgba(182,182,182,0.4)"></canvas>
           <p class="section-title">The Moon</p>
           <p id="Moon-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Mercury" width="160" height="160"></canvas>
+          <canvas id="Mercury" width="160" height="160" data-color="#808080" data-glow="rgba(140,140,140,0.4)"></canvas>
           <p class="section-title">Mercury</p>
           <p id="Mercury-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Venus" width="160" height="160"></canvas>
+          <canvas id="Venus" width="160" height="160" data-color="#FFC649" data-glow="rgba(255,198,73,0.4)"></canvas>
           <p class="section-title">Venus</p>
           <p id="Venus-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Mars" width="160" height="160"></canvas>
+          <canvas id="Mars" width="160" height="160" data-color="#CF3C2C" data-glow="rgba(207,60,44,0.4)"></canvas>
           <p class="section-title">Mars</p>
           <p id="Mars-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Jupiter" width="160" height="160"></canvas>
+          <canvas id="Jupiter" width="160" height="160" data-color="#C88B3A" data-glow="rgba(200,139,58,0.4)"></canvas>
           <p class="section-title">Jupiter</p>
           <p id="Jupiter-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Saturn" width="160" height="160"></canvas>
+          <canvas id="Saturn" width="160" height="160" data-color="#FAD5A5" data-glow="rgba(250,213,165,0.4)"></canvas>
           <p class="section-title">Saturn</p>
           <p id="Saturn-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Uranus" width="160" height="160"></canvas>
+          <canvas id="Uranus" width="160" height="160" data-color="#4FD0E7" data-glow="rgba(79,208,231,0.4)"></canvas>
           <p class="section-title">Uranus</p>
           <p id="Uranus-readout" class="readout">Loading telemetry...</p>
         </div>
 
         <div class="planet-card">
-          <canvas id="Neptune" width="160" height="160"></canvas>
+          <canvas id="Neptune" width="160" height="160" data-color="#4169E1" data-glow="rgba(65,105,225,0.4)"></canvas>
           <p class="section-title">Neptune</p>
           <p id="Neptune-readout" class="readout">Loading telemetry...</p>
         </div>
@@ -238,5 +238,12 @@
   </section>
 
  <script src="planets.js"></script>
+ <script>
+   // Set CSS custom properties for planet glows based on data-glow attributes
+   document.querySelectorAll('canvas[data-glow]').forEach(canvas => {
+     const glowValue = canvas.getAttribute('data-glow');
+     canvas.style.setProperty('--glow-color', glowValue);
+   });
+ </script>
 </body>
 </html>

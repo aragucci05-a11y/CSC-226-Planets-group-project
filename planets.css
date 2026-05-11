@@ -111,11 +111,9 @@ nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
   box-shadow: 0 0 20px rgba(167, 139, 250, 0.2);
 }
 
-canvas {
-  display: block; margin: 1rem auto; background: rgba(0, 0, 0, 0.8); border-radius: 100%;
+canvas[data-glow] {
+  filter: drop-shadow(0 0 calc(3vh + 2px) var(--glow-color));
 }
-
-
 
 .readout {
   font-family: 'Courier New', monospace; font-size: 14px; color: #a78bfa; text-align: center;
