@@ -2,8 +2,8 @@
 // BOOT SEQUENCE LOGIC
 // ==========================================
 const bootMessages = [
-    "INITIALIZING PLANETARY TELEMETRY HUD...",
-    "ESTABLISHING SECURE UPLINK TO JPL HORIZONS...",
+    "INITIALIZING PLANETARY TELEMETRY...",
+    "ESTABLISHING SECURE LINK TO JPL HORIZONS...",
     "BYPASSING LOCAL CORS PROTOCOLS...",
     "DOWNLOADING REAL-TIME ORBITAL DATA...",
     "CALCULATING PHASE ANGLES...",
@@ -35,6 +35,9 @@ let currentSide  = 'left';
 // Store orbital speeds for each planet
 const orbitalSpeeds = {};
 
+let orbitInterval = null;
+let orbitDirection = 1;
+
 // Track animation state for each canvas
 const animationState = {};
 
@@ -50,6 +53,47 @@ const planetColors = {
   'Uranus': '#4FD0E7',      // Cyan
   'Neptune': '#4169E1'      // Deep blue
 };
+
+// Cinematic Auto-Orbit
+function toggleAutoOrbit() {
+    const btn = document.getElementById('orbit-btn');
+    const slider = document.getElementById('demo-slider');
+    
+    if (orbitInterval) {
+      clearInterval(orbitInterval);
+      orbitInterval = null;
+      btn.innerHTML = "▶ Auto-Orbit";
+      btn.style.boxShadow = "none";
+    } else {
+      btn.innerHTML = "⏸ Pause Orbit";
+      btn.style.boxShadow = "0 0 15px rgba(79, 208, 231, 0.6)"; 
+      
+      orbitInterval = setInterval(() => {
+        currentAngle += (2 * orbitDirection);
+        if (currentAngle >= 180) {
+          currentAngle = 180; orbitDirection = -1;
+          currentSide = currentSide === 'left' ? 'Right' : 'left';
+        } else if (currentAngle <= 0) {
+          currentAngle = 0; orbitDirection = 1;
+        }
+        slider.value = currentAngle;
+        phDraw(currentAngle);
+  }, 50); 
+    }
+    
+    // Add event listener only once after setup
+    if (btn) {
+      btn.addEventListener("click", toggleAutoOrbit);
+    }
+}
+
+// Initialize the button with click handler on page load
+document.addEventListener('DOMContentLoaded', function() {
+  const orbitBtn = document.getElementById('orbit-btn');
+  if (orbitBtn) {
+    orbitBtn.addEventListener('click', toggleAutoOrbit);
+  }
+});
 
 // Easing function for smooth animation
 function easeOutCubic(progress) {
@@ -298,12 +342,3 @@ fetchPlanetPhaseAngle('Jupiter', '599');
 fetchPlanetPhaseAngle('Saturn', '699');
 fetchPlanetPhaseAngle('Uranus', '799');
 fetchPlanetPhaseAngle('Neptune', '899');
-
-
-
-
-
-
-
-
-

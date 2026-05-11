@@ -96,7 +96,7 @@ nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
   flex-wrap: wrap;
   justify-content: center;
   gap: 2rem;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 .planet-card {
@@ -115,14 +115,7 @@ canvas {
   display: block; margin: 1rem auto; background: rgba(0, 0, 0, 0.8); border-radius: 100%;
 }
 
-/* Tachometer Neon Bar */
-.tach-container {
-  width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin: 8px auto; overflow: hidden;
-}
-.tach-bar {
-  height: 100%; background: linear-gradient(90deg, #4fd0e7, #a78bfa);
-  box-shadow: 0 0 10px #4fd0e7; width: 0%; transition: width 1s ease-out;
-}
+
 
 .readout {
   font-family: 'Courier New', monospace; font-size: 14px; color: #a78bfa; text-align: center;
