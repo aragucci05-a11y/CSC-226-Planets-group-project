@@ -32,8 +32,17 @@ runBootSequence();
 let currentAngle = 90;
 let currentSide  = 'left';
 
-// Store orbital speeds for each planet
-const orbitalSpeeds = {};
+// Hard-coded average orbital speeds (km/s) for display
+const orbitalSpeeds = {
+  'Moon': 1.022,
+  'Mercury': 47.36,
+  'Venus': 35.02,
+  'Mars': 24.07,
+  'Jupiter': 13.07,
+  'Saturn': 9.68,
+  'Uranus': 6.80,
+  'Neptune': 5.43
+};
 
 let orbitInterval = null;
 let orbitDirection = 1;
@@ -261,38 +270,9 @@ async function fetchPlanetPhaseAngle(planetName, horizonsCode) {
     }
     console.log(`Solar Elongation for ${planetName}:`, solarElongation);
     
-    // Third API call for orbital speed/heliocentric distance rate (quantity 20)
-    const speedParams = new URLSearchParams({
-      ...baseParams,
-      QUANTITIES: '20'
-    });
-    const speedUrl = `https://corsproxy.io/?https://ssd.jpl.nasa.gov/api/horizons.api?${speedParams.toString()}`;
-    const speedResponse = await fetch(speedUrl);
-    const speedData = await speedResponse.json();
-    
-    if (!speedData.result) {
-      console.error(`No speed data for ${planetName}:`, speedData);
-      return null;
-    }
-    
-    let orbitalSpeed = null;
-    const speedLines = speedData.result.split('\n');
-    for (let i = 0; i < speedLines.length; i++) {
-      if (speedLines[i].includes('$$SOE')) {
-        const dataLine = speedLines[i + 1];
-        if (dataLine) {
-          const values = dataLine.trim().split(/\s+/);
-          // Quantity 20 is the range rate, convert to km/s if needed
-          orbitalSpeed = Math.abs(parseFloat(values[values.length - 1]));
-          break;
-        }
-      }
-    }
-    console.log(`Orbital Speed for ${planetName}:`, orbitalSpeed);
-    
-    // Store orbital speed for display in readout
-    if(orbitalSpeed !== null) {
-      orbitalSpeeds[planetName] = orbitalSpeed;
+    // Orbital speed: use hard-coded averages (see `orbitalSpeeds` above).
+    if (orbitalSpeeds[planetName] !== undefined) {
+      console.log(`Using hardcoded orbital speed for ${planetName}:`, orbitalSpeeds[planetName]);
     }
     
     // Determine which side is lit based on solar elongation
