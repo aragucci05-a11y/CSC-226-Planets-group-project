@@ -12,7 +12,7 @@ body {
   margin: 0;
   font-family: sans-serif;
   /* Holographic Targeting Cursor */
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%234fd0e7" stroke-width="2" stroke-dasharray="4 4"/><circle cx="16" cy="16" r="2" fill="%23a78bfa"/></svg>') 16 16, crosshair;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox=" 0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%234fd0e7" stroke-width="2" stroke-dasharray="4 4"/><circle cx="16" cy="16" r="2" fill="%23a78bfa"/></svg>') 16 16, crosshair;
 }
 
 body::after {
@@ -34,7 +34,7 @@ body::after {
 }
 
 a, button, input[type="range"], .planet-card {
-  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%23a78bfa" stroke-width="2"/><circle cx="16" cy="16" r="4" fill="%234fd0e7"/></svg>') 16 16, pointer !important;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox=" 0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="%23a78bfa" stroke-width="2"/><circle cx="16" cy="16" r="4" fill="%234fd0e7"/></svg>') 16 16, pointer !important;
 }
 
 /* Custom Sci-Fi Scrollbar */
@@ -91,20 +91,49 @@ nav a { color: white; text-decoration: none; font-size: 1.1rem; text-shadow: 0 0
 nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
 
 /* Planet Grid & HUD Focus Effect */
+/* Container to constrain width and prevent horizontal scroll */
+.planets-container {
+  max-width: 100vw;
+  overflow-x: hidden;
+  padding: 0 2rem;
+}
+
+/* Updated planet grid with proper centering */
 .planet-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 2rem;
-  max-width: 1400px;
+  align-items: stretch;
+  gap: 4rem;
+  max-width: none;
   margin: 0 auto;
+  padding: 2rem 0;
 }
+
+.planet-grid .planet-card {
+  flex-shrink: 0;
+  width: 380px; /* Fixed width for consistent sizing */
+}
+
 .planet-card {
   transition: all 0.4s ease;
   padding: 1rem;
   border-radius: 12px;
   text-align: center;
+  min-height: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
+
+.planet-card canvas {
+  width: 192px;
+  height: 192px;
+  object-fit: contain;
+}
+
 .planet-card:hover {
   transform: scale(1.05);
   background: rgba(167, 139, 250, 0.1);
