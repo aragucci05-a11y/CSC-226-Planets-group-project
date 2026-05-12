@@ -109,6 +109,80 @@ function easeOutCubic(progress) {
   return 1 - Math.pow(1 - progress, 3);
 }
 
+// ==========================================
+// LUNAR PHASE CALCULATIONS
+// ==========================================
+function getLunarPhaseAngle(date = new Date()) {
+  const LUNAR_CYCLE = 29.53058867; // days
+  const KNOWN_NEW_MOON = new Date('2000-01-06T18:14:00Z'); // J2000 reference
+
+  const daysSince = (date - KNOWN_NEW_MOON) / (1000 * 60 * 60 * 24);
+  const phase = ((daysSince % LUNAR_CYCLE) + LUNAR_CYCLE) % LUNAR_CYCLE;
+  const angle = (phase / LUNAR_CYCLE) * 360;
+
+  return angle; // 0–360°
+}
+
+function getLunarPhase(date = new Date()) {
+  const angle = getLunarPhaseAngle(date);
+
+  const phases = [
+    { name: ' New Moon',        max: 22.5  },
+    { name: ' Waxing Crescent', max: 67.5  },
+    { name: ' First Quarter',   max: 112.5 },
+    { name: ' Waxing Gibbous',  max: 157.5 },
+    { name: ' Full Moon',       max: 202.5 },
+    { name: ' Waning Gibbous',  max: 247.5 },
+    { name: ' Last Quarter',    max: 292.5 },
+    { name: ' Waning Crescent', max: 337.5 },
+    { name: ' New Moon',        max: 360   },
+  ];
+
+  return phases.find(p => angle < p.max).name;
+}
+
+function initMoonPhase() {
+  const now = new Date();
+  const lunarAngle = getLunarPhaseAngle(now);
+  const lunarPhase = getLunarPhase(now);
+  
+  // Convert lunar phase angle (0-360°) to phDraw angle (0-180°)
+  // Lunar: 0°=new, 90°=first quarter, 180°=full, 270°=last quarter
+  // phDraw: 0°=full, 90°=quarters, 180°=new
+  const phDrawAngle = Math.abs(180 - lunarAngle);
+  
+  // Determine lit side based on lunar phase
+  // 0-180°: waxing, right side lit; 180-360°: waning, left side lit
+  const litSide = lunarAngle < 180 ? 'Right' : 'left';
+  
+  // Get the canvas and animate the drawing
+  const canvas = document.getElementById('Moon');
+  if (canvas) {
+    const animationDuration = 800;
+    const startTime = Date.now();
+    
+    function animatePhase() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / animationDuration, 1);
+      const easedProgress = easeOutCubic(progress);
+      
+      // Draw the phase
+      phDraw(phDrawAngle, canvas, litSide, easedProgress);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animatePhase);
+      } else {
+        // Animation complete: update readout with lunar phase info
+        updateMoonReadout();
+      }
+    }
+    
+    animatePhase();
+  }
+  
+  return phDrawAngle;
+}
+
  //draws a phase demo on a canvas element, given an angle and side (left or right)
 function phDraw(a, cv, side, animProgress) {
   cv   = cv   || document.getElementById('phase-demo');
@@ -312,9 +386,25 @@ async function fetchPlanetPhaseAngle(planetName, horizonsCode) {
   }
 }
 
+// Update Moon readout with lunar phase info
+function updateMoonReadout() {
+  const lunarAngle = getLunarPhaseAngle();
+  const lunarPhase = getLunarPhase();
+  const phDrawAngle = Math.abs(180 - lunarAngle);
+  const percentage = Math.round((1 - phDrawAngle / 180) * 100);
+  const litSide = lunarAngle < 180 ? 'Right' : 'left';
+  
+  const readoutElement = document.getElementById('Moon-readout');
+  if (readoutElement) {
+    const orbitalSpeed = orbitalSpeeds['Moon'] ? orbitalSpeeds['Moon'].toFixed(2) : 'N/A';
+    readoutElement.innerHTML = `${phDrawAngle.toFixed(1)}° | ${percentage}% lit — ${litSide}   |   ${lunarPhase}<br>Orbital Speed: ${orbitalSpeed} km/s`;
+  }
+}
+
 // Fetch phase angles for all planets
 // Horizons codes: Moon=301, Mercury=199, Venus=299, Mars=499, Jupiter=599, Saturn=699, Uranus=799, Neptune=899
-fetchPlanetPhaseAngle('Moon', '301');
+// Moon uses algorithmic lunar phase calculation instead of API
+initMoonPhase();
 fetchPlanetPhaseAngle('Mercury', '199');
 fetchPlanetPhaseAngle('Venus', '299');
 fetchPlanetPhaseAngle('Mars', '499');
