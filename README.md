@@ -43,7 +43,7 @@ a variety of metrics about every single object NASA tracks in space, with time s
 I chose this because it made the program more modular and expandable, allowing me to add additional data
 and program addittional content to my liking in the future.
 
-The APi was challenging to work wih at first, as a simple fetch request within javascript returned a CORS error.
+The API was challenging to work with at first, as a simple fetch request within javascript returned a CORS error.
 I then researched this and how to get around it, and figured out I could use a proxy to connect, thus
 bypassing this issue. I then tested its functionality in the console to confirm it worked.
 
