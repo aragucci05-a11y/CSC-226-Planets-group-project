@@ -103,11 +103,12 @@
       </div>
       
       <div class="planet-grid">
+        <!-- Download buttons only visible when logged in -->
         <div class="planet-card">
           <canvas id="Moon" width="384" height="384" data-color="#A9A9A9" data-glow="rgba(182,182,182,0.4)"></canvas>
           <p class="section-title">The Moon</p>
           <p id="Moon-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Moon-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Moon')">⬇ Download Snapshot</button>
             <span class="download-count" id="Moon-count">Downloads: 0</span>
           </div>
@@ -117,7 +118,7 @@
           <canvas id="Mercury" width="384" height="384" data-color="#808080" data-glow="rgba(140,140,140,0.4)"></canvas>
           <p class="section-title">Mercury</p>
           <p id="Mercury-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Mercury-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Mercury')">⬇ Download Snapshot</button>
             <span class="download-count" id="Mercury-count">Downloads: 0</span>
           </div>
@@ -127,7 +128,7 @@
           <canvas id="Venus" width="384" height="384" data-color="#FFC649" data-glow="rgba(255,198,73,0.4)"></canvas>
           <p class="section-title">Venus</p>
           <p id="Venus-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Venus-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Venus')">⬇ Download Snapshot</button>
             <span class="download-count" id="Venus-count">Downloads: 0</span>
           </div>
@@ -137,7 +138,7 @@
           <canvas id="Mars" width="384" height="384" data-color="#CF3C2C" data-glow="rgba(207,60,44,0.4)"></canvas>
           <p class="section-title">Mars</p>
           <p id="Mars-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Mars-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Mars')">⬇ Download Snapshot</button>
             <span class="download-count" id="Mars-count">Downloads: 0</span>
           </div>
@@ -147,7 +148,7 @@
           <canvas id="Jupiter" width="384" height="384" data-color="#C88B3A" data-glow="rgba(200,139,58,0.4)"></canvas>
           <p class="section-title">Jupiter</p>
           <p id="Jupiter-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Jupiter-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Jupiter')">⬇ Download Snapshot</button>
             <span class="download-count" id="Jupiter-count">Downloads: 0</span>
           </div>
@@ -157,7 +158,7 @@
           <canvas id="Saturn" width="384" height="384" data-color="#FAD5A5" data-glow="rgba(250,213,165,0.4)"></canvas>
           <p class="section-title">Saturn</p>
           <p id="Saturn-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Saturn-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Saturn')">⬇ Download Snapshot</button>
             <span class="download-count" id="Saturn-count">Downloads: 0</span>
           </div>
@@ -167,7 +168,7 @@
           <canvas id="Uranus" width="384" height="384" data-color="#4FD0E7" data-glow="rgba(79,208,231,0.4)"></canvas>
           <p class="section-title">Uranus</p>
           <p id="Uranus-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Uranus-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Uranus')">⬇ Download Snapshot</button>
             <span class="download-count" id="Uranus-count">Downloads: 0</span>
           </div>
@@ -177,7 +178,7 @@
           <canvas id="Neptune" width="384" height="384" data-color="#4169E1" data-glow="rgba(65,105,225,0.4)"></canvas>
           <p class="section-title">Neptune</p>
           <p id="Neptune-readout" class="readout">Loading telemetry...</p>
-          <div class="download-container">
+          <div class="download-container" id="Neptune-download-container">
             <button class="download-btn" onclick="downloadPlanetSnapshot('Neptune')">⬇ Download Snapshot</button>
             <span class="download-count" id="Neptune-count">Downloads: 0</span>
           </div>

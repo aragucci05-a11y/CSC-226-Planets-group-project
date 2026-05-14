@@ -712,13 +712,19 @@ function displayAllDownloadCounts() {
 // ==========================================
 async function downloadPlanetSnapshot(planetName) {
   try {
+    // Check if user is logged in
+    if (!currentUser) {
+      alert('Please login to access the download feature.');
+      showAuthModal();
+      return;
+    }
+
     // Find the planet card
     const planetCard = document.querySelector(`.planet-card:has(#${planetName})`);
     if (!planetCard) {
       console.error(`Planet card for ${planetName} not found`);
       return;
     }
-
     // Get current date and time for filename
     const now = new Date();
     const timestamp = now.toLocaleString().replace(/[\/\s,:]/g, '-');
