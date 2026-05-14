@@ -1,4 +1,204 @@
 // ==========================================
+// USER AUTHENTICATION SYSTEM
+// ==========================================
+let currentUser = null;
+
+function initAuth() {
+  // Check if user is already logged in
+  const savedUser = localStorage.getItem('current_user');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    updateAuthUI();
+  } else {
+    showAuthModal();
+  }
+}
+
+function getUserDatabase() {
+  const db = localStorage.getItem('user_database');
+  return db ? JSON.parse(db) : {};
+}
+
+function saveUserDatabase(database) {
+  localStorage.setItem('user_database', JSON.stringify(database));
+}
+
+function userExists(username) {
+  const database = getUserDatabase();
+  return database.hasOwnProperty(username);
+}
+
+function createUser(username, password) {
+  const database = getUserDatabase();
+  if (userExists(username)) {
+    return false;
+  }
+  database[username] = {
+    password: btoa(password), // Simple base64 encoding (not for production)
+    downloads: {}
+  };
+  saveUserDatabase(database);
+  return true;
+}
+
+function authenticateUser(username, password) {
+  const database = getUserDatabase();
+  if (!userExists(username)) {
+    return false;
+  }
+  const user = database[username];
+  return user.password === btoa(password);
+}
+
+function loginUser(username) {
+  const database = getUserDatabase();
+  const user = database[username];
+  currentUser = {
+    username: username,
+    downloads: user.downloads || {}
+  };
+  localStorage.setItem('current_user', JSON.stringify(currentUser));
+  updateAuthUI();
+  closeAuthModal();
+}
+
+function logoutUser() {
+  currentUser = null;
+  localStorage.removeItem('current_user');
+  updateAuthUI();
+  showAuthModal();
+}
+
+function updateAuthUI() {
+  const authToggleBtn = document.getElementById('auth-toggle-btn');
+  const userPanel = document.getElementById('user-panel');
+  
+  if (currentUser) {
+    // User is logged in
+    authToggleBtn.textContent = currentUser.username.toUpperCase();
+    authToggleBtn.onclick = null;
+    userPanel.classList.remove('hidden');
+    document.getElementById('user-display').textContent = `Logged in as: ${currentUser.username}`;
+  } else {
+    // User is not logged in
+    authToggleBtn.textContent = 'Login';
+    authToggleBtn.onclick = () => toggleAuthModal();
+    userPanel.classList.add('hidden');
+  }
+}
+
+function toggleAuthModal() {
+  const modal = document.getElementById('auth-modal');
+  if (modal.classList.contains('hidden')) {
+    showAuthModal();
+  } else {
+    closeAuthModal();
+  }
+}
+
+function showAuthModal() {
+  const modal = document.getElementById('auth-modal');
+  modal.classList.remove('hidden');
+  clearAuthForms();
+}
+
+function closeAuthModal() {
+  const modal = document.getElementById('auth-modal');
+  modal.classList.add('hidden');
+}
+
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+  
+  document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
+  document.getElementById(`${tab}-form`).classList.add('active');
+  
+  clearAuthErrors();
+}
+
+function clearAuthForms() {
+  document.getElementById('login-username').value = '';
+  document.getElementById('login-password').value = '';
+  document.getElementById('signup-username').value = '';
+  document.getElementById('signup-password').value = '';
+  document.getElementById('signup-confirm').value = '';
+  clearAuthErrors();
+}
+
+function clearAuthErrors() {
+  document.getElementById('login-error').classList.remove('show');
+  document.getElementById('signup-error').classList.remove('show');
+}
+
+function showAuthError(form, message) {
+  const errorElement = document.getElementById(`${form}-error`);
+  errorElement.textContent = message;
+  errorElement.classList.add('show');
+}
+
+function handleLogin() {
+  const username = document.getElementById('login-username').value.trim();
+  const password = document.getElementById('login-password').value;
+  
+  if (!username || !password) {
+    showAuthError('login', 'Please enter username and password');
+    return;
+  }
+  
+  if (!userExists(username)) {
+    showAuthError('login', 'Username does not exist');
+    return;
+  }
+  
+  if (!authenticateUser(username, password)) {
+    showAuthError('login', 'Incorrect password');
+    return;
+  }
+  
+  loginUser(username);
+}
+
+function handleSignup() {
+  const username = document.getElementById('signup-username').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const confirm = document.getElementById('signup-confirm').value;
+  
+  if (!username || !password || !confirm) {
+    showAuthError('signup', 'Please fill all fields');
+    return;
+  }
+  
+  if (username.length < 3) {
+    showAuthError('signup', 'Username must be at least 3 characters');
+    return;
+  }
+  
+  if (password.length < 4) {
+    showAuthError('signup', 'Password must be at least 4 characters');
+    return;
+  }
+  
+  if (password !== confirm) {
+    showAuthError('signup', 'Passwords do not match');
+    return;
+  }
+  
+  if (!createUser(username, password)) {
+    showAuthError('signup', 'Username already exists');
+    return;
+  }
+  
+  loginUser(username);
+}
+
+function handleLogout() {
+  if (confirm('Are you sure you want to logout?')) {
+    logoutUser();
+  }
+}
+
+// ==========================================
 // BOOT SEQUENCE LOGIC
 // ==========================================
 const bootMessages = [
@@ -24,6 +224,13 @@ async function runBootSequence() {
     bootScreen.style.opacity = '0';
     document.body.style.overflow = 'auto'; 
     setTimeout(() => { bootScreen.style.display = 'none'; }, 1000);
+    
+    // Show auth modal after boot sequence completes
+    setTimeout(() => {
+      if (!currentUser) {
+        showAuthModal();
+      }
+    }, 1100);
 }
 runBootSequence();
 
@@ -98,10 +305,20 @@ function toggleAutoOrbit() {
 
 // Initialize the button with click handler on page load
 document.addEventListener('DOMContentLoaded', function() {
+  // Check if user is already logged in
+  const savedUser = localStorage.getItem('current_user');
+  if (savedUser) {
+    currentUser = JSON.parse(savedUser);
+    updateAuthUI();
+  }
+  
   const orbitBtn = document.getElementById('orbit-btn');
   if (orbitBtn) {
     orbitBtn.addEventListener('click', toggleAutoOrbit);
   }
+  
+  // Initialize download database for current user
+  initDownloadDatabase();
 });
 
 // Easing function for smooth animation
@@ -412,3 +629,100 @@ fetchPlanetPhaseAngle('Jupiter', '599');
 fetchPlanetPhaseAngle('Saturn', '699');
 fetchPlanetPhaseAngle('Uranus', '799');
 fetchPlanetPhaseAngle('Neptune', '899');
+
+// ==========================================
+// DOWNLOAD DATABASE & TRACKING (PER-USER)
+// ==========================================
+const planets = ['Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
+
+function initDownloadDatabase() {
+  // Initialize download counts for current user
+  if (!currentUser) return;
+  
+  planets.forEach(planet => {
+    if (!currentUser.downloads.hasOwnProperty(planet)) {
+      currentUser.downloads[planet] = 0;
+    }
+  });
+  
+  // Display all download counts on page load
+  displayAllDownloadCounts();
+}
+
+function getDownloadCount(planetName) {
+  if (!currentUser) return 0;
+  return currentUser.downloads[planetName] || 0;
+}
+
+function incrementDownloadCount(planetName) {
+  if (!currentUser) return;
+  
+  currentUser.downloads[planetName] = (currentUser.downloads[planetName] || 0) + 1;
+  
+  // Save to localStorage
+  const database = getUserDatabase();
+  database[currentUser.username].downloads = currentUser.downloads;
+  saveUserDatabase(database);
+  
+  updateDownloadDisplay(planetName);
+}
+
+function updateDownloadDisplay(planetName) {
+  const count = getDownloadCount(planetName);
+  const countElement = document.getElementById(`${planetName}-count`);
+  if (countElement) {
+    countElement.textContent = `Downloads: ${count}`;
+  }
+}
+
+function displayAllDownloadCounts() {
+  planets.forEach(planet => {
+    updateDownloadDisplay(planet);
+  });
+}
+
+// ==========================================
+// DOWNLOAD SNAPSHOT FUNCTIONALITY
+// ==========================================
+async function downloadPlanetSnapshot(planetName) {
+  try {
+    // Find the planet card
+    const planetCard = document.querySelector(`.planet-card:has(#${planetName})`);
+    if (!planetCard) {
+      console.error(`Planet card for ${planetName} not found`);
+      return;
+    }
+
+    // Get current date and time for filename
+    const now = new Date();
+    const timestamp = now.toLocaleString().replace(/[\/\s,:]/g, '-');
+    const filename = `${planetName}-snapshot-${timestamp}.png`;
+
+    // Capture the card using html2canvas
+    const canvas = await html2canvas(planetCard, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true,
+      allowTaint: true
+    });
+
+    // Convert to blob and download
+    canvas.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      // Increment download count after successful download
+      incrementDownloadCount(planetName);
+    }, 'image/png');
+
+  } catch (error) {
+    console.error(`Error downloading snapshot for ${planetName}:`, error);
+    alert(`Failed to download ${planetName} snapshot. Check console for details.`);
+  }
+}

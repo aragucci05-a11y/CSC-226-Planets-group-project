@@ -9,18 +9,56 @@
 </head>
 <body>
 
+    <div id="auth-modal" class="auth-modal hidden">
+      <div class="auth-modal-content">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-tab="login" onclick="switchAuthTab('login')">Login</button>
+          <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        
+        <div id="login-form" class="auth-form active">
+          <h3>Welcome Back, Explorer</h3>
+          <input type="text" id="login-username" placeholder="Username" class="auth-input">
+          <input type="password" id="login-password" placeholder="Password" class="auth-input">
+          <button onclick="handleLogin()" class="auth-btn">Login</button>
+          <p id="login-error" class="auth-error"></p>
+        </div>
+        
+        <div id="signup-form" class="auth-form">
+          <h3>Create Explorer Account</h3>
+          <input type="text" id="signup-username" placeholder="Username" class="auth-input">
+          <input type="password" id="signup-password" placeholder="Password" class="auth-input">
+          <input type="password" id="signup-confirm" placeholder="Confirm Password" class="auth-input">
+          <button onclick="handleSignup()" class="auth-btn">Sign Up</button>
+          <p id="signup-error" class="auth-error"></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="user-panel" class="user-panel hidden">
+      <div class="user-info">
+        <span class="user-name" id="user-display"></span>
+        <button onclick="handleLogout()" class="logout-btn">Logout</button>
+      </div>
+    </div>
+
     <div id="boot-screen">
       <div class="terminal-text" id="terminal-output"></div>
     </div>
 
     <nav>
-      <a href="#home">Home</a>
-      <a href="#demo">Interactive Demo</a>
-      <a href="#planets">Planets</a>
-      <a href="#facts">Facts</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact Us</a>
-      <a href="#credits">Credits</a>
+      <div class="nav-left">
+        <a href="#home">Home</a>
+        <a href="#demo">Interactive Demo</a>
+        <a href="#planets">Planets</a>
+        <a href="#facts">Facts</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact Us</a>
+        <a href="#credits">Credits</a>
+      </div>
+      <div class="nav-right">
+        <button id="auth-toggle-btn" onclick="toggleAuthModal()" class="auth-toggle-btn">Login</button>
+      </div>
     </nav>
 
     <section id="home">
@@ -66,48 +104,80 @@
           <canvas id="Moon" width="384" height="384" data-color="#A9A9A9" data-glow="rgba(182,182,182,0.4)"></canvas>
           <p class="section-title">The Moon</p>
           <p id="Moon-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Moon')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Moon-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Mercury" width="384" height="384" data-color="#808080" data-glow="rgba(140,140,140,0.4)"></canvas>
           <p class="section-title">Mercury</p>
           <p id="Mercury-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Mercury')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Mercury-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Venus" width="384" height="384" data-color="#FFC649" data-glow="rgba(255,198,73,0.4)"></canvas>
           <p class="section-title">Venus</p>
           <p id="Venus-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Venus')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Venus-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Mars" width="384" height="384" data-color="#CF3C2C" data-glow="rgba(207,60,44,0.4)"></canvas>
           <p class="section-title">Mars</p>
           <p id="Mars-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Mars')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Mars-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Jupiter" width="384" height="384" data-color="#C88B3A" data-glow="rgba(200,139,58,0.4)"></canvas>
           <p class="section-title">Jupiter</p>
           <p id="Jupiter-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Jupiter')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Jupiter-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Saturn" width="384" height="384" data-color="#FAD5A5" data-glow="rgba(250,213,165,0.4)"></canvas>
           <p class="section-title">Saturn</p>
           <p id="Saturn-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Saturn')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Saturn-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Uranus" width="384" height="384" data-color="#4FD0E7" data-glow="rgba(79,208,231,0.4)"></canvas>
           <p class="section-title">Uranus</p>
           <p id="Uranus-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Uranus')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Uranus-count">Downloads: 0</span>
+          </div>
         </div>
 
         <div class="planet-card">
           <canvas id="Neptune" width="384" height="384" data-color="#4169E1" data-glow="rgba(65,105,225,0.4)"></canvas>
           <p class="section-title">Neptune</p>
           <p id="Neptune-readout" class="readout">Loading telemetry...</p>
+          <div class="download-container">
+            <button class="download-btn" onclick="downloadPlanetSnapshot('Neptune')">⬇ Download Snapshot</button>
+            <span class="download-count" id="Neptune-count">Downloads: 0</span>
+          </div>
         </div>
       </div>
     </section>
@@ -237,6 +307,7 @@
     </div>
   </section>
 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
  <script src="planets.js"></script>
  <script>
    // Set CSS custom properties for planet glows based on data-glow attributes

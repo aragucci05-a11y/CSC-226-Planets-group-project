@@ -83,12 +83,238 @@ html::before {
 
 /* ===================== LAYOUT & HUD COMPONENTS ===================== */
 nav {
-  position: fixed; top: 0; width: 100%; display: flex; gap: 2rem;
+  position: fixed; top: 0; width: 100%; display: flex; gap: 2rem; justify-content: space-between; align-items: center;
   padding: 1rem 2rem; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(8px); z-index: 999;
   box-shadow: 0 8px 26px rgba(79, 208, 231, 0.12);
 }
+
+.nav-left {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
 nav a { color: white; text-decoration: none; font-size: 1.1rem; text-shadow: 0 0 10px rgba(79, 208, 231, 0.2); transition: color 0.2s ease, text-shadow 0.2s ease; }
 nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
+
+/* ===================== AUTHENTICATION UI ===================== */
+.auth-toggle-btn {
+  background: linear-gradient(135deg, rgba(79, 208, 231, 0.2), rgba(167, 139, 250, 0.2));
+  border: 1px solid rgba(79, 208, 231, 0.5);
+  color: #4fd0e7;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(79, 208, 231, 0.4);
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 12px rgba(79, 208, 231, 0.2), inset 0 0 12px rgba(79, 208, 231, 0.1);
+  font-family: sans-serif;
+}
+
+.auth-toggle-btn:hover {
+  background: linear-gradient(135deg, rgba(79, 208, 231, 0.4), rgba(167, 139, 250, 0.4));
+  border-color: #a78bfa;
+  color: #a78bfa;
+  box-shadow: 0 0 20px rgba(79, 208, 231, 0.4), 0 0 30px rgba(167, 139, 250, 0.3);
+}
+
+.auth-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+}
+
+.auth-modal.hidden {
+  display: none;
+  opacity: 0;
+}
+
+.auth-modal-content {
+  background: linear-gradient(135deg, rgba(10, 5, 30, 0.95), rgba(20, 10, 40, 0.95));
+  border: 2px solid rgba(79, 208, 231, 0.4);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 0 40px rgba(79, 208, 231, 0.3), inset 0 0 40px rgba(79, 208, 231, 0.1);
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(79, 208, 231, 0.2);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 0.8rem;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.auth-tab.active {
+  color: #4fd0e7;
+  border-bottom-color: #4fd0e7;
+  text-shadow: 0 0 10px rgba(79, 208, 231, 0.4);
+}
+
+.auth-tab:hover {
+  color: #a78bfa;
+}
+
+.auth-form {
+  display: none;
+}
+
+.auth-form.active {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form h3 {
+  color: #4fd0e7;
+  margin: 0 0 0.5rem 0;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 12px rgba(79, 208, 231, 0.3);
+}
+
+.auth-input {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(79, 208, 231, 0.3);
+  color: white;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 8px rgba(79, 208, 231, 0.1);
+}
+
+.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.auth-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #4fd0e7;
+  box-shadow: inset 0 0 12px rgba(79, 208, 231, 0.2), 0 0 12px rgba(79, 208, 231, 0.2);
+}
+
+.auth-btn {
+  background: linear-gradient(135deg, rgba(79, 208, 231, 0.3), rgba(167, 139, 250, 0.3));
+  border: 1px solid rgba(79, 208, 231, 0.5);
+  color: #4fd0e7;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(79, 208, 231, 0.4);
+  letter-spacing: 0.05em;
+  margin-top: 0.5rem;
+  box-shadow: 0 0 12px rgba(79, 208, 231, 0.2), inset 0 0 12px rgba(79, 208, 231, 0.1);
+}
+
+.auth-btn:hover {
+  background: linear-gradient(135deg, rgba(79, 208, 231, 0.5), rgba(167, 139, 250, 0.5));
+  border-color: #a78bfa;
+  color: #a78bfa;
+  box-shadow: 0 0 20px rgba(79, 208, 231, 0.4), 0 0 30px rgba(167, 139, 250, 0.3);
+}
+
+.auth-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin: 0;
+  text-shadow: 0 0 8px rgba(255, 107, 107, 0.3);
+  display: none;
+}
+
+.auth-error.show {
+  display: block;
+}
+
+.user-panel {
+  position: fixed;
+  top: 1rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-panel.hidden {
+  display: none;
+}
+
+.user-info {
+  background: rgba(10, 5, 30, 0.8);
+  border: 1px solid rgba(79, 208, 231, 0.4);
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 0 16px rgba(79, 208, 231, 0.2);
+  backdrop-filter: blur(8px);
+}
+
+.user-name {
+  color: #4fd0e7;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 8px rgba(79, 208, 231, 0.3);
+}
+
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(79, 208, 231, 0.4);
+  color: #4fd0e7;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+}
+
+.logout-btn:hover {
+  border-color: #a78bfa;
+  color: #a78bfa;
+  background: rgba(167, 139, 250, 0.1);
+}
 
 /* Planet Grid & HUD Focus Effect */
 /* Container to constrain width and prevent horizontal scroll */
@@ -138,6 +364,52 @@ nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
   transform: scale(1.05);
   background: rgba(167, 139, 250, 0.1);
   box-shadow: 0 0 20px rgba(167, 139, 250, 0.2);
+}
+
+.download-btn {
+  background: linear-gradient(135deg, rgba(79, 208, 231, 0.2), rgba(167, 139, 250, 0.2));
+  border: 1px solid rgba(79, 208, 231, 0.5);
+  color: #4fd0e7;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(79, 208, 231, 0.4);
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 12px rgba(79, 208, 231, 0.2), inset 0 0 12px rgba(79, 208, 231, 0.1);
+  font-family: sans-serif;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, rgba(79, 208, 231, 0.4), rgba(167, 139, 250, 0.4));
+  border-color: #a78bfa;
+  color: #a78bfa;
+  box-shadow: 0 0 20px rgba(79, 208, 231, 0.4), 0 0 30px rgba(167, 139, 250, 0.3), inset 0 0 16px rgba(79, 208, 231, 0.15);
+  text-shadow: 0 0 12px rgba(167, 139, 250, 0.6);
+  transform: translateY(-2px);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 0 12px rgba(79, 208, 231, 0.2), inset 0 0 12px rgba(79, 208, 231, 0.1);
+}
+
+.download-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.download-count {
+  font-size: 12px;
+  color: rgba(79, 208, 231, 0.7);
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 6px rgba(79, 208, 231, 0.3);
+  letter-spacing: 0.05em;
 }
 
 canvas[data-glow] {
