@@ -97,6 +97,7 @@ nav {
   display: flex;
   gap: 1rem;
   align-items: center;
+  margin-left: -2rem;
 }
 
 nav a { color: white; text-decoration: none; font-size: 1.1rem; text-shadow: 0 0 10px rgba(79, 208, 231, 0.2); transition: color 0.2s ease, text-shadow 0.2s ease; }
@@ -117,6 +118,7 @@ nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
   letter-spacing: 0.05em;
   box-shadow: 0 0 12px rgba(79, 208, 231, 0.2), inset 0 0 12px rgba(79, 208, 231, 0.1);
   font-family: sans-serif;
+  transform: translateX(-100px);
 }
 
 .auth-toggle-btn:hover {
@@ -144,6 +146,40 @@ nav a:hover { color: #a78bfa; text-shadow: 0 0 16px rgba(167, 139, 250, 0.55); }
 .auth-modal.hidden {
   display: none;
   opacity: 0;
+}
+
+/* Close button for the auth modal */
+.auth-close-btn {
+  position: fixed;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  background: rgba(79, 208, 231, 0.2);
+  border: 1px solid rgba(79, 208, 231, 0.5);
+  color: #4fd0e7;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 8px rgba(79, 208, 231, 0.4);
+}
+
+.auth-close-btn:hover {
+  background: rgba(79, 208, 231, 0.5);
+  border-color: #a78bfa;
+  color: #a78bfa;
+  transform: translateX(-50%) scale(1.15);
+}
+
+.auth-close-btn::before {
+  content: "✕";
+  font-weight: bold;
 }
 
 .auth-modal-content {

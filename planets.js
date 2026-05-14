@@ -100,12 +100,42 @@ function showAuthModal() {
   const modal = document.getElementById('auth-modal');
   modal.classList.remove('hidden');
   clearAuthForms();
+  
+  // Show the close button when auth modal is displayed
+  const closeBtn = document.getElementById('auth-close-btn');
+  if (closeBtn) {
+    closeBtn.style.display = 'flex';
+  }
 }
 
 function closeAuthModal() {
   const modal = document.getElementById('auth-modal');
+  const closeBtn = document.getElementById('auth-close-btn');
+  
+  // Hide the close button when closing
+  if (closeBtn) {
+    closeBtn.style.display = 'none';
+  }
+  
   modal.classList.add('hidden');
 }
+
+// Add click listener to close button for keyboard accessibility
+document.addEventListener('DOMContentLoaded', function() {
+  const closeBtn = document.getElementById('auth-close-btn');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeAuthModal);
+    
+    // Also handle Escape key to close modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !modalHidden) {
+        closeAuthModal();
+      }
+    });
+  }
+});
+
+let modalHidden = true;
 
 function switchAuthTab(tab) {
   document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -225,12 +255,8 @@ async function runBootSequence() {
     document.body.style.overflow = 'auto'; 
     setTimeout(() => { bootScreen.style.display = 'none'; }, 1000);
     
-    // Show auth modal after boot sequence completes
-    setTimeout(() => {
-      if (!currentUser) {
-        showAuthModal();
-      }
-    }, 1100);
+  // Login page is now optional - no forced auth modal
+  // Users can browse freely without any authentication requirement
 }
 runBootSequence();
 

@@ -35,7 +35,10 @@
       </div>
     </div>
 
-    <div id="user-panel" class="user-panel hidden">
+  <!-- Close button for auth modal -->
+  <button id="auth-close-btn" class="auth-close-btn" onclick="closeAuthModal()" style="display:none;" aria-label="Close login"></button>
+
+  <div id="user-panel" class="user-panel hidden">
       <div class="user-info">
         <span class="user-name" id="user-display"></span>
         <button onclick="handleLogout()" class="logout-btn">Logout</button>
