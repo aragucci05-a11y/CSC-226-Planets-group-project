@@ -665,11 +665,34 @@ function initDownloadDatabase() {
   // Initialize download counts for current user
   if (!currentUser) return;
   
+  // Load existing downloads from localStorage, or initialize empty object
+  let savedDownloads = localStorage.getItem(`${currentUser.username}_downloads`);
+  if (savedDownloads) {
+    try {
+      const parsed = JSON.parse(savedDownloads);
+      // Merge with defaults for any new planets
+      Object.keys(planets).forEach((_, i) => {
+        if (!parsed.hasOwnProperty(planets[i])) {
+          parsed[planets[i]] = 0;
+        }
+      });
+      currentUser.downloads = parsed;
+    } catch (e) {
+      console.error('Error parsing saved downloads:', e);
+    }
+  } else {
+    // No saved data - start fresh
+    currentUser.downloads = {};
+  }
+  
   planets.forEach(planet => {
     if (!currentUser.downloads.hasOwnProperty(planet)) {
       currentUser.downloads[planet] = 0;
     }
   });
+  
+  // Persist the download counts to localStorage
+  saveDownloadCounts();
   
   // Display all download counts on page load
   displayAllDownloadCounts();
@@ -678,6 +701,36 @@ function initDownloadDatabase() {
 function getDownloadCount(planetName) {
   if (!currentUser) return 0;
   return currentUser.downloads[planetName] || 0;
+}
+
+// Save download counts to localStorage for persistence across sessions
+function saveDownloadCounts() {
+  if (!currentUser) return;
+  
+  const savedDownloads = localStorage.getItem(`${currentUser.username}_downloads`);
+  let downloadsData;
+  
+  if (savedDownloads) {
+    try {
+      downloadsData = JSON.parse(savedDownloads);
+    } catch (e) {
+      console.error('Error parsing existing download data:', e);
+      downloadsData = {};
+    }
+  } else {
+    downloadsData = {};
+  }
+  
+  // Merge with current state, preserving any saved counts
+  Object.keys(currentUser.downloads).forEach(planet => {
+    if (!downloadsData.hasOwnProperty(planet)) {
+      downloadsData[planet] = currentUser.downloads[planet];
+    } else {
+      downloadsData[planet] = currentUser.downloads[planet];
+    }
+  });
+  
+  localStorage.setItem(`${currentUser.username}_downloads`, JSON.stringify(downloadsData));
 }
 
 function incrementDownloadCount(planetName) {
@@ -708,27 +761,28 @@ function displayAllDownloadCounts() {
 }
 
 // ==========================================
-// DOWNLOAD SNAPSHOT FUNCTIONALITY
+// DOWNLOAD SNAPSHOT FUNCTIONALITY WITH SQLITE BACKEND
 // ==========================================
-async function downloadPlanetSnapshot(planetName) {
+async function downloadPlanetSnapshot(planetName, planetId) {
   try {
     // Check if user is logged in
     if (!currentUser) {
-      alert('Please login to access the download feature.');
+      alert('🪐 PHASE LOCK DISABLED — Authentication Required\n\nPlease login to access the planetary snapshot archive.\nYour credentials will be verified upon download attempt.');
       showAuthModal();
       return;
     }
-
+    
     // Find the planet card
     const planetCard = document.querySelector(`.planet-card:has(#${planetName})`);
     if (!planetCard) {
       console.error(`Planet card for ${planetName} not found`);
       return;
     }
+    
     // Get current date and time for filename
     const now = new Date();
     const timestamp = now.toLocaleString().replace(/[\/\s,:]/g, '-');
-    const filename = `${planetName}-snapshot-${timestamp}.png`;
+    const filename = `${planetId}-snapshot-${timestamp}.png`;
 
     // Capture the card using html2canvas
     const canvas = await html2canvas(planetCard, {
@@ -749,8 +803,8 @@ async function downloadPlanetSnapshot(planetName) {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       
-      // Increment download count after successful download
-      incrementDownloadCount(planetName);
+      // Increment download count via SQLite backend API
+      incrementDownloadCountViaAPI(planetId);
     }, 'image/png');
 
   } catch (error) {
@@ -758,3 +812,55 @@ async function downloadPlanetSnapshot(planetName) {
     alert(`Failed to download ${planetName} snapshot. Check console for details.`);
   }
 }
+
+// Increment download count via SQLite backend API
+async function incrementDownloadCountViaAPI(planetId) {
+  try {
+    // Make POST request to Python server's increment endpoint
+    const response = await fetch(`/api/increment/${encodeURIComponent(planetId)}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log(`Download count incremented for ${planetId}:`, data);
+      return true;
+    } else {
+      console.error('Failed to increment download count:', response.status, response.statusText);
+      // Fallback: use localStorage if API fails
+      incrementLocalStorageCount(planetId);
+      return false;
+    }
+  } catch (error) {
+    console.error(`API error for ${planetId}:`, error);
+    // Fallback to localStorage on any error
+    incrementLocalStorageCount(planetId);
+    return false;
+  }
+}
+
+// LocalStorage fallback function (existing functionality preserved)
+function incrementLocalStorageCount(planetName) {
+  let downloads = JSON.parse(localStorage.getItem(`${currentUser.username}_downloads`) || '{}');
+  if (!downloads[planetName]) {
+    downloads[planetName] = 0;
+  }
+  downloads[planetName]++;
+  localStorage.setItem(`${currentUser.username}_downloads`, JSON.stringify(downloads));
+  
+  // Update display
+  const countElement = document.getElementById(`${planetName}-count`);
+  if (countElement) {
+    countElement.textContent = `Downloads: ${downloads[planetName]}`;
+  }
+}
+
+// ==========================================
+// SQLITE DATABASE BACKEND API ENDPOINTS
+// ==========================================
+// GET endpoint for reading download counts: /api/download_count/<planetId>
+// POST endpoint for incrementing downloads: /api/increment/<planetId>
+// Database file: planet_downloads.db (created automatically by server.py)
